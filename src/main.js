@@ -2,7 +2,6 @@
 Collaborators: Alicia Zhen, Joe Carter, Sean Tran
 Game Title:
 Date Completed:
-Creative Tilt Justification:
 */
 let config = {
     type: Phaser.CANVAS,
