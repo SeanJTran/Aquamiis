@@ -22,4 +22,12 @@ let game = new Phaser.Game(config);
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
+var collectedCreatures = [];
+var commonCreatures = ['Imi', 'Oop', 'Kle', 'Amo'];
+var rareCreatures = ['Kran', 'Jept', 'Rano', 'Welm'];
+var legendaryCreatures = ['Swamp', 'River', 'Grass', 'Lives'];
+var commonsPulled = 0;
+var raresPulled = 0;
+var legendariesPulled = 0;
+
 let keySpace;

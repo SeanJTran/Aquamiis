@@ -43,10 +43,6 @@ class Play extends Phaser.Scene {
         this.canPress = false;
         this.displayMenu = false;
         var rect;
-        var collectedCreatures = [];
-        var commonCreatures = ['Imi', 'Oop', 'Kle', 'Amo'];
-        var rareCreatures = ['Kran', 'Jept', 'Rano', 'Welm'];
-        var legendaryCreatures = ['Swamp', 'River', 'Grass', 'Lives'];
 
         //interactable menu setup
         this.menuButton = this.add.image(game.config.width - 37, game.config.height - 23, 'menu').setOrigin(0,0).setInteractive();
@@ -78,22 +74,26 @@ class Play extends Phaser.Scene {
         this.buy3.depth = MIDDLE;
 
         this.buy1.on('pointerdown', function(){
-            if(this.score >= 10){
+            //commonsPulled<4 prevents infinite loop in pullCreature DO NOT REMOVE
+            if(this.score >= 10 && commonsPulled<4){
                 this.score -= 10;
+                this.pullCreature('C');
             }
-            this.pullCreature('C');
+            
         }, this);
         this.buy2.on('pointerdown', function(){
-            if(this.score >= 100){
+            if(this.score >= 100 && raresPulled<4){
                 this.score -= 100;
+                this.pullCreature('R');
             }
-            this.pullCreature('R');
+            
         }, this);
         this.buy3.on('pointerdown', function(){
-            if(this.score >= 1000){
+            if(this.score >= 1000 && legendariesPulled<4){
                 this.score -= 1000;
+                this.pullCreature('L');
             }
-            this.pullCreature('L');
+            
         }, this);
 
         //bring up menu
@@ -196,16 +196,42 @@ class Play extends Phaser.Scene {
 
     //method cannot be called for some reason
     pullCreature(letter){
+        let pull;
         switch(letter){
             case 'C':
-                //do stuff
+                while(true){
+                    pull = Phaser.Math.RND.pick(commonCreatures);
+                    console.log(pull);
+                    if(collectedCreatures.indexOf(pull) == -1){
+                        collectedCreatures += pull;
+                        commonsPulled++;
+                        break;
+                    }
+                }
                 break;
             case 'R':
-                //do stuff
+                while(true){
+                    pull = Phaser.Math.RND.pick(rareCreatures);
+                    console.log(pull);
+                    if(collectedCreatures.indexOf(pull) == -1){
+                        collectedCreatures += pull;
+                        raresPulled++;
+                        break;
+                    }
+                }
                 break;
             case 'L':
-                //do stuff
+                while(true){
+                    pull = Phaser.Math.RND.pick(legendaryCreatures);
+                    console.log(pull);
+                    if(collectedCreatures.indexOf(pull) == -1){
+                        collectedCreatures += pull;
+                        legendariesPulled++;
+                        break;
+                    }
+                }
                 break;
         }
+        console.log(collectedCreatures);
     }
 }
