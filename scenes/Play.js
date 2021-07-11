@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
     
     preload() {
         this.load.image('bg', './assets/bg.png');
-
+        this.load.audio('menuMusic', './assets/menuMusic.mp3');
         this.load.image('menu', './assets/uiassets/MenuTab.png');
         this.load.image('closeMenu', './assets/uiassets/CollapseButton.png');
 
@@ -26,6 +26,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        this.sound.play('menuMusic', {loop: true, volume: 0.2});
         let playTextConfig = {
             fontSize: '28px',
             backgroundColor: null,

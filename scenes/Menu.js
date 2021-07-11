@@ -6,6 +6,7 @@ class Menu extends Phaser.Scene{
     preload(){
       //this.load.image('bgmenu', './assets/bgimage.png');
       this.load.audio('menuMusic', './assets/menuMusic.mp3');
+      this.load.audio('clicks', './assets/clicks.wav');
     }
 
     create(){
@@ -23,7 +24,6 @@ class Menu extends Phaser.Scene{
       if(this.pointer.leftButtonReleased()){
         this.justClicked = false;
       }
-
       if(leftDown && !this.menuStart && !this.justClicked){
         console.log("PreStart");
         this.sound.play('menuMusic', {loop: true, volume: 0.2});
@@ -32,7 +32,17 @@ class Menu extends Phaser.Scene{
       }
       if(leftDown && this.menuStart && !this.justClicked){
           console.log("PostStart");
-          this.sound.stopAll();
+          let clicksound = {
+            mute: false,
+            volume: 2,
+            rate: 0.9,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 0,
+            pan: 0
+          }
+          this.sound.play("clicks", clicksound);
           this.scene.start("playScene");
       }
 
