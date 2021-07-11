@@ -8,7 +8,7 @@ class Play extends Phaser.Scene {
         this.load.audio('menuMusic', './assets/menuMusic.mp3');
         this.load.image('menu', './assets/uiassets/MenuTab.png');
         this.load.image('closeMenu', './assets/uiassets/CollapseButton.png');
-
+        this.load.audio('water', './assets/water.wav');
         this.load.image('podsTab', './assets/uiassets/pinkPodsTab.png');
         this.load.image('creaturesTab', './assets/uiassets/pinkCreaturesTab.png');
         this.load.image('pondTab', './assets/uiassets/pinkPondTab.png');
@@ -239,6 +239,7 @@ class Play extends Phaser.Scene {
     }
     update(){
         if(this.pointer.leftButtonDown() && this.canPress){
+            this.sound.play('water', { volume: 0.3 });
             this.canPress = false;
             this.score += 1;
         }
