@@ -5,14 +5,23 @@ class Play extends Phaser.Scene {
     
     preload() {
         this.load.image('bg', './assets/bg.png');
-        this.load.image('menu', './assets/menuButton.png');
-        this.load.image('closeMenu', './assets/exitMenu.png');
-        this.load.image('podsTab', './assets/podsTab.png');
-        this.load.image('creaturesTab', './assets/creaturesTab.png');
-        //Need to change path name for below images when assets are added
-        //this.load.image('ccc', './assets/.png');
-        //this.load.image('rcc', './assets/.png');
-        //this.load.image('lcc', './assets/.png');
+
+        this.load.image('menu', './assets/uiassets/MenuTab.png');
+        this.load.image('closeMenu', './assets/uiassets/CollapseButton.png');
+
+        this.load.image('podsTab', './assets/uiassets/pinkPodsTab.png');
+        this.load.image('creaturesTab', './assets/uiassets/pinkCreaturesTab.png');
+        this.load.image('pondTab', './assets/uiassets/pinkPondTab.png');
+
+        this.load.image('wpodsTab', './assets/uiassets/whitePodsTab.png');
+        this.load.image('wcreaturesTab', './assets/uiassets/whiteCreaturesTab.png');
+        this.load.image('wpondTab', './assets/uiassets/whitePondTab.png');
+
+        this.load.image('uibar', './assets/uiassets/uibar.png')
+
+        this.load.image('ccc', './assets/uiassets/basicPod.png');
+        this.load.image('rcc', './assets/uiassets/rarePod.png');
+        this.load.image('lcc', './assets/uiassets/legendaryPod.png');
         
     }
 
@@ -20,13 +29,13 @@ class Play extends Phaser.Scene {
         let playTextConfig = {
             fontSize: '28px',
             backgroundColor: null,
-            color: '#1A5BE6',
+            color: '#FFFFFF',
             padding: {
                 x: 5,
                 y: 5
             },
             align: 'right',
-            stroke: '#1EEBD6',
+            stroke: '#FFFFFF',
             strokeThickness: 2,
             fixedWidth: game.config.width/2 - borderPadding
         }
@@ -37,7 +46,8 @@ class Play extends Phaser.Scene {
         const TOP = 3;
         const MIDDLE = 2;
         const BOTTOM = 1;
-        this.scoreText = this.add.text(game.config.width/4 * 2, borderPadding, "Life Essence: ", playTextConfig).setOrigin(0,0);
+        this.scoreText = this.add.text(190, game.config.height - 25, "0", playTextConfig).setOrigin(1,0.5);
+        this.scoreText.depth = TOP;
         this.pointer = game.input.activePointer;
         this.score = 0;
         this.canPress = false;
@@ -45,32 +55,39 @@ class Play extends Phaser.Scene {
         this.addEssence = false;
         var rect;
 
+        //static menu setup
+        this.uibar = this.add.image(0, game.config.height - 50, 'uibar').setOrigin(0,0);
+        this.uibar.depth = MIDDLE;
+
+
         //interactable menu setup
-        this.menuButton = this.add.image(game.config.width - 84, game.config.height - 33, 'menu').setOrigin(0,0).setInteractive();
+        this.menuButton = this.add.image(game.config.width - 84, game.config.height - 50, 'menu').setOrigin(0,1).setInteractive();
+        /*
         this.menuButtonText = this.add.text(game.config.width - 84 - 60, game.config.height - 20, "Menu", {
             fontSize: '24px',
             color: '#1A5BE6',
         }).setOrigin(0,0);
+        */
 
         this.closeMenuButton = this.add.image(game.config.width - 84, game.config.height - 150 - 33, 'closeMenu').setOrigin(0,0);
         this.closeMenuButton.depth = TOP;
         this.closeMenuButton.alpha = 0;
 
-        this.pods = this.add.image(0/*(112)*/, game.config.height - 150 - 33, 'podsTab').setOrigin(0,0);
-        this.pods.alpha = 0;
+        this.pond = this.add.image(0, game.config.height - 50, 'pondTab').setOrigin(0,1);
 
-        this.creatures = this.add.image(112, game.config.height - 150 - 33, 'creaturesTab').setOrigin(0,0);
-        this.creatures.alpha = 0;
+        this.pods = this.add.image(112, game.config.height - 50, 'podsTab').setOrigin(0,1);
 
-        this.buy1 = this.add.image(game.config.width/4 * 1, game.config.height - borderUISize - 50, 'ccc');
+        this.creatures = this.add.image(112*2, game.config.height - 50, 'creaturesTab').setOrigin(0,1);
+
+        this.buy1 = this.add.image(game.config.width/4 * 1, game.config.height - 55, 'ccc').setOrigin(0,1);
         this.buy1.alpha = 0;
         this.buy1.depth = MIDDLE;
 
-        this.buy2 = this.add.image(game.config.width/4 * 2, game.config.height - borderUISize - 50, 'rcc');
+        this.buy2 = this.add.image(game.config.width/4 * 2, game.config.height - 55, 'rcc').setOrigin(0,1);
         this.buy2.alpha = 0;
         this.buy2.depth = MIDDLE;
 
-        this.buy3 = this.add.image(game.config.width/4 * 3, game.config.height - borderUISize - 50, 'lcc');
+        this.buy3 = this.add.image(game.config.width/4 * 3, game.config.height - 55, 'lcc').setOrigin(0,1);
         this.buy3.alpha = 0;
         this.buy3.depth = MIDDLE;
 
@@ -100,27 +117,32 @@ class Play extends Phaser.Scene {
         //bring up menu
         this.menuButton.on('pointerdown', function(){
             this.displayMenu = true;
-            rect = this.add.rectangle(0, game.config.height-150, game.config.width, 150, 0x2A7EFB, 1).setOrigin(0,0);
+            rect = this.add.rectangle(0, game.config.height-150, game.config.width, 150, 0xffc1aa, 1).setOrigin(0,0);
             this.menuButton.disableInteractive();
 
             this.closeMenuButton.alpha = 1;
             this.closeMenuButton.setInteractive();
 
-            //make tabs interactive
-            this.pods.alpha = 1;
+            //set Tab positions
+            this.pond.setInteractive();
             this.pods.setInteractive();
-
-            this.creatures.alpha = 1;
             this.creatures.setInteractive();
+            this.pond.x = 0;
+            this.pond.y = game.config.height - 150;
+            this.pods.x = 112;
+            this.pods.y = game.config.height - 150;
+            this.creatures.x = 112*2;
+            this.creatures.y = game.config.height - 150;
 
-            //display creatures content by default
+            //display pods content by default
+            /*
             this.buy1.alpha = 1;
             this.buy1.setInteractive();
             this.buy2.alpha = 1;
             this.buy2.setInteractive();
             this.buy3.alpha = 1;
             this.buy3.setInteractive();
-            console.log("hi");
+            */
         }, this);
 
 
@@ -130,37 +152,65 @@ class Play extends Phaser.Scene {
             this.closeMenuButton.alpha = 0;
             this.closeMenuButton.disableInteractive();
 
-            //hide tabs
-            this.pods.alpha = 0;
-            this.pods.disableInteractive();
 
-            this.creatures.alpha = 0;
+            //set tab positions
+            this.pond.disableInteractive();
+            this.pods.disableInteractive();
             this.creatures.disableInteractive();
+            //this.pond.setTexture('pondTab'); redudant
+            //this.pods.setTexture('podsTab');  redundant within podsTabDisable()
+            //this.creatures.setTexture('creaturesTab'); redudant
+            this.pond.x = 0;
+            this.pond.y = game.config.height - 50;
+            this.pods.x = 112;
+            this.pods.y = game.config.height - 50;
+            this.creatures.x = 112*2;
+            this.creatures.y = game.config.height - 50;
 
             this.menuButton.setInteractive();
 
             //hide background of menu
             rect.destroy();
 
+            //hide pond tab content
+            this.pondTabDisable();
+
             //hide pods tab content
-            this.buy1.alpha = 0;
-            this.buy1.disableInteractive();
-            this.buy2.alpha = 0;
-            this.buy2.disableInteractive();
-            this.buy3.alpha = 0;
-            this.buy3.disableInteractive();
+            this.podsTabDisable();
 
             //hide creatures tab content
-            //---Here----
+            this.creaturesTabDisable();
+        }, this);
+
+        //pressed pond tab
+        this.pond.on('pointerdown', function(){
+            console.log("pond clicked");
+
+            //disable Creatures display
+            this.creaturesTabDisable();
+
+            //disable pods display
+            this.podsTabDisable();
+
+            //disply pond tab options
+            this.pond.setTexture('wpondTab');
+            rect.fillColor = 0xFFFFFF;
+
         }, this);
 
         //pressed pods tab
         this.pods.on('pointerdown', function(){
+            console.log("pods clicked");
+
             //disable creatures tab display
-            //----here----
+            this.creaturesTabDisable();
+
+            //disable pond display
+            this.pondTabDisable();
 
             //display perchasable containers for creatures
-            console.log("pods clicked");
+            this.pods.setTexture('wpodsTab');
+            rect.fillColor = 0xFFFFFF;
             this.buy1.alpha = 1;
             this.buy1.setInteractive();
             this.buy2.alpha = 1;
@@ -171,16 +221,18 @@ class Play extends Phaser.Scene {
 
         //pressed creatures tab
         this.creatures.on('pointerdown', function(){
-            //disable pods tab display
-            this.buy1.alpha = 0;
-            this.buy1.disableInteractive();
-            this.buy2.alpha = 0;
-            this.buy2.disableInteractive();
-            this.buy3.alpha = 0;
-            this.buy3.disableInteractive();
-            //code for codex display here
-
             console.log("creatures clicked");
+
+            //disable pond tab display
+            this.pondTabDisable();
+
+            //disable pods tab display
+            this.podsTabDisable();
+
+            //code for creature display here
+            this.creatures.setTexture('wcreaturesTab');
+            rect.fillColor = 0xFFFFFF;
+            
         }, this);
 
     }
@@ -202,10 +254,9 @@ class Play extends Phaser.Scene {
                 this.addEssence = false;
             }, this);
         }
-        this.scoreText.text = "Life Essence: " + this.score;
+        this.scoreText.text = this.score;
     }
 
-    //method cannot be called for some reason
     pullCreature(letter){
         let pull;
         switch(letter){
@@ -244,5 +295,27 @@ class Play extends Phaser.Scene {
                 break;
         }
         console.log(collectedCreatures);
+    }
+
+    pondTabDisable(){
+        console.log("Pond disabled");
+        this.pond.setTexture('pondTab');
+    }
+
+    podsTabDisable(){
+        console.log("pods disabled");
+        this.pods.setTexture('podsTab');
+        this.buy1.alpha = 0;
+        this.buy1.disableInteractive();
+        this.buy2.alpha = 0;
+        this.buy2.disableInteractive();
+        this.buy3.alpha = 0;
+        this.buy3.disableInteractive();
+    }
+    creaturesTabDisable(){
+        console.log("Creatures disabled");
+        if(this.creatures.texture.key != 'creaturesTab'){
+            this.creatures.setTexture('creaturesTab');
+        }
     }
 }
