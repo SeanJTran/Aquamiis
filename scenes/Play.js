@@ -5,8 +5,8 @@ class Play extends Phaser.Scene {
     
     preload() {
         this.load.image('bg', './assets/bg.png');
-        this.load.image('menu', './assets/menu.png');
-        this.load.image('closeMenu', './assets/dropMenu.png');
+        this.load.image('menu', './assets/menuButton.png');
+        this.load.image('closeMenu', './assets/exitMenu.png');
         this.load.image('podsTab', './assets/podsTab.png');
         this.load.image('creaturesTab', './assets/creaturesTab.png');
         //Need to change path name for below images when assets are added
@@ -42,16 +42,17 @@ class Play extends Phaser.Scene {
         this.score = 0;
         this.canPress = false;
         this.displayMenu = false;
+        this.addEssence = false;
         var rect;
 
         //interactable menu setup
-        this.menuButton = this.add.image(game.config.width - 37, game.config.height - 23, 'menu').setOrigin(0,0).setInteractive();
-        this.menuButtonText = this.add.text(game.config.width - 37 - 60, game.config.height - 20, "Menu", {
+        this.menuButton = this.add.image(game.config.width - 84, game.config.height - 33, 'menu').setOrigin(0,0).setInteractive();
+        this.menuButtonText = this.add.text(game.config.width - 84 - 60, game.config.height - 20, "Menu", {
             fontSize: '24px',
             color: '#1A5BE6',
         }).setOrigin(0,0);
 
-        this.closeMenuButton = this.add.image(game.config.width - 41, game.config.height - 150, 'closeMenu').setOrigin(0,0);
+        this.closeMenuButton = this.add.image(game.config.width - 84, game.config.height - 150 - 33, 'closeMenu').setOrigin(0,0);
         this.closeMenuButton.depth = TOP;
         this.closeMenuButton.alpha = 0;
 
@@ -190,6 +191,16 @@ class Play extends Phaser.Scene {
         }
         if(this.pointer.leftButtonReleased() &&  !this.canPress){
             this.canPress = true;
+        }
+
+        //add score passivly every 10 seconds
+        if(!this.addEssence){
+            this.addEssence = true;
+            this.time.delayedCall(10000, () => {
+                console.log("added score");
+                this.score += (commonsPulled + (4 * raresPulled) + (10 * legendariesPulled));
+                this.addEssence = false;
+            }, this);
         }
         this.scoreText.text = "Life Essence: " + this.score;
     }
