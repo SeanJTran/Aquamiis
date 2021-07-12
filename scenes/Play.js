@@ -46,8 +46,8 @@ class Play extends Phaser.Scene {
         this.drop = this.anims.create({
             key: 'drops',
             repeat: -1,
-            frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 3, first: 0}),
-            frameRate: 10
+            frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 2, first: 0}),
+            frameRate: 4
         })
         
         //initiallization section
@@ -59,6 +59,7 @@ class Play extends Phaser.Scene {
         this.pointer = game.input.activePointer;
         this.score = 0;
         this.canPress = false;
+        this.vd = false;
         this.displayMenu = false;
         this.addEssence = false;
         this.pondLevel = 3;
@@ -251,8 +252,15 @@ class Play extends Phaser.Scene {
             this.sound.play('water', { volume: 0.1 });
             this.canPress = false;
             this.score += 1;
-            this.dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
-            this.dropper.play('drops');
+            if (!this.vd) {
+                this.vd = true;
+                this.dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
+                this.dropper.play('drops');
+                this.time.delayedCall(500, () => {
+                    this.dropper.destroy();
+                    this.vd = false;
+                });
+            }
         }
         if(this.pointer.leftButtonReleased() &&  !this.canPress){
             this.canPress = true;
