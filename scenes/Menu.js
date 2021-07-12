@@ -4,13 +4,13 @@ class Menu extends Phaser.Scene{
     }
 
     preload(){
-      //this.load.image('bgmenu', './assets/bgimage.png');
+      this.load.image('bgmenu', './assets/start.png');
       this.load.audio('menuMusic', './assets/menuMusic.mp3');
       this.load.audio('clicks', './assets/clicks.wav');
     }
 
     create(){
-      //this.backgroundmenu = this.add.tileSprite(0, 0, 720 , 480, 'bgmenu').setOrigin(0, 0);
+      this.backgroundmenu = this.add.tileSprite(0, 0, 960 , 540, 'bgmenu').setOrigin(0, 0);
       //keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
       // initialize
