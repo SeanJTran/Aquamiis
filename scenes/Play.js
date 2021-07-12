@@ -22,6 +22,10 @@ class Play extends Phaser.Scene {
         this.load.image('ccc', './assets/uiassets/basicPod.png');
         this.load.image('rcc', './assets/uiassets/rarePod.png');
         this.load.image('lcc', './assets/uiassets/legendaryPod.png');
+
+        this.load.spritesheet('commonEgg', './assets/commonEggAtlas.png', {frameWidth: 75, frameHeight: 51});
+        this.load.spritesheet('rareEgg', './assets/rareEggAtlas.png', {frameWidth: 75, frameHeight: 51});
+        this.load.spritesheet('legendaryEgg', './assets/legendaryEggAtlas.png', {frameWidth: 75, frameHeight: 51});
         
     }
 
@@ -64,7 +68,7 @@ class Play extends Phaser.Scene {
         this.addEssence = false;
         this.pondLevel = 3;
         var rect;
-        this.eggs = [new spawnPositions(false, 150, 300), new spawnPositions(false, 300, 150), new spawnPositions(false, 450, 450)];
+        this.eggs = [new spawnPositions(false, 250, 400), new spawnPositions(false, 400, 450), new spawnPositions(false, 650, 425)];
 
         //static menu setup
         this.uibar = this.add.image(0, game.config.height - 50, 'uibar').setOrigin(0,0);
@@ -85,10 +89,13 @@ class Play extends Phaser.Scene {
         this.closeMenuButton.alpha = 0;
 
         this.pond = this.add.image(0, game.config.height - 50, 'pondTab').setOrigin(0,1);
+        this.pond.depth = BOTTOM;
 
         this.pods = this.add.image(112, game.config.height - 50, 'podsTab').setOrigin(0,1);
+        this.pods.depth = BOTTOM;
 
         this.creatures = this.add.image(112*2, game.config.height - 50, 'creaturesTab').setOrigin(0,1);
+        this.creatures.depth = BOTTOM;
 
         this.buy1 = this.add.image(game.config.width/4 * 1, game.config.height - 55, 'ccc').setOrigin(0,1);
         this.buy1.alpha = 0;
@@ -105,21 +112,17 @@ class Play extends Phaser.Scene {
         this.buy1.on('pointerdown', function(){
             //commonsPulled<4 prevents infinite loop in pullCreature DO NOT REMOVE
             if(this.score >= 10 && commonsPulled<4){
-                this.score -= 10;
                 this.pullCreature('C');
             }
-            
         }, this);
+
         this.buy2.on('pointerdown', function(){
             if(this.score >= 100 && raresPulled<4){
-                this.score -= 100;
                 this.pullCreature('R');
             }
-            
         }, this);
         this.buy3.on('pointerdown', function(){
             if(this.score >= 1000 && legendariesPulled<4){
-                this.score -= 1000;
                 this.pullCreature('L');
             }
             
@@ -129,6 +132,7 @@ class Play extends Phaser.Scene {
         this.menuButton.on('pointerdown', function(){
             this.displayMenu = true;
             rect = this.add.rectangle(0, game.config.height-150, game.config.width, 150, 0xffc1aa, 1).setOrigin(0,0);
+            rect.depth = BOTTOM;
             this.menuButton.disableInteractive();
 
             this.closeMenuButton.alpha = 1;
@@ -246,6 +250,26 @@ class Play extends Phaser.Scene {
             
         }, this);
 
+        this.commonBob = this.anims.create({
+            key: 'commonBob',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('commonEgg', {start: 0, end: 3, first: 0}),
+            frameRate: 4
+        });
+        this.rareBob = this.anims.create({
+            key: 'rareBob',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('rareEgg', {start: 0, end: 3, first: 0}),
+            frameRate: 4
+        });
+        this.legendaryBob = this.anims.create({
+            key: 'legendaryBob',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('legendaryEgg', {start: 0, end: 3, first: 0}),
+            frameRate: 4
+        });
+
+
     }
     update(){
         if(this.pointer.leftButtonDown() && this.canPress){
@@ -270,7 +294,6 @@ class Play extends Phaser.Scene {
         if(!this.addEssence){
             this.addEssence = true;
             this.time.delayedCall(10000, () => {
-                console.log("added score");
                 this.score += (commonsPulled + (4 * raresPulled) + (10 * legendariesPulled));
                 this.addEssence = false;
             }, this);
@@ -284,56 +307,75 @@ class Play extends Phaser.Scene {
         let eggIndex = 0;
         let ptr;
         let pullAllowed = false;
+        const LEG_TIME = 9000;
+        const RARE_TIME = 6000;
+        const COM_TIME = 3000;
         
-        for(let i=0; i<this.pondLevel; i++){
+        for(eggIndex; eggIndex<this.pondLevel; eggIndex++){
             if(this.eggs[eggIndex].flag == false){
                 break;
-            }else{
-                eggIndex++;
             }
         }
-        if(eggIndex != 3){
+        if(eggIndex < this.pondLevel){
             ptr = this.eggs[eggIndex];
+            ptr.flag = true;
             pullAllowed = true;
         }else{
             pullAllowed = false;
         }
+        console.log("pullAllowed: " + pullAllowed);
+        console.log("eggIndex: " + eggIndex);
 
         if(pullAllowed){
             let pull;
             switch(letter){
                 case 'C':
-                    ptr.object = this.add.sprite(this, ptr.x, ptr.y, 'holder');
+                    ptr.object = this.add.sprite(ptr.x, ptr.y, 'holder').play('commonBob');
                     while(true){
                         pull = Phaser.Math.RND.pick(commonCreatures);
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
+                            this.time.delayedCall(COM_TIME, () => {
+                                ptr.flag = false;
+                                ptr.object.destroy();
+                            }, this);
                             collectedCreatures += pull;
                             commonsPulled++;
+                            this.score -= 10;
                             break;
                         }
                     }
                     break;
                 case 'R':
-                    ptr.object = this.add.sprite(this, ptr.x, ptr.y, 'holder');
+                    ptr.object = this.add.sprite(ptr.x, ptr.y, 'holder').play('rareBob');
                     while(true){
                         pull = Phaser.Math.RND.pick(rareCreatures);
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
+                            this.time.delayedCall(RARE_TIME, () => {
+                                ptr.flag = false;
+                                ptr.object.destroy();
+                            }, this);
                             collectedCreatures += pull;
                             raresPulled++;
+                            this.score -= 100;
                             break;
                         }
                     }
                     break;
                 case 'L':
-                    ptr.object = this.add.sprite(this, ptr.x, ptr.y, 'holder');
+                    ptr.object = this.add.sprite(ptr.x, ptr.y, 'holder').play('legendaryBob');
                     while(true){
                         pull = Phaser.Math.RND.pick(legendaryCreatures);
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
+                            this.time.delayedCall(LEG_TIME, () => {
+                                ptr.flag = false;
+                                ptr.object.destroy();
+                            }, this);
                             collectedCreatures += pull;
                             legendariesPulled++;
+                            this.score -= 1000;
                             break;
                        }
                    }
@@ -345,12 +387,10 @@ class Play extends Phaser.Scene {
     }
 
     pondTabDisable(){
-        console.log("Pond disabled");
         this.pond.setTexture('pondTab');
     }
 
     podsTabDisable(){
-        console.log("pods disabled");
         this.pods.setTexture('podsTab');
         this.buy1.alpha = 0;
         this.buy1.disableInteractive();
@@ -360,12 +400,12 @@ class Play extends Phaser.Scene {
         this.buy3.disableInteractive();
     }
     creaturesTabDisable(){
-        console.log("Creatures disabled");
         if(this.creatures.texture.key != 'creaturesTab'){
             this.creatures.setTexture('creaturesTab');
         }
     }
 }
+
 class spawnPositions{
     constructor(flag, x, y){
         this.flag = flag;
