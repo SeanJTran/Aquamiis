@@ -268,14 +268,12 @@ class Play extends Phaser.Scene {
         let ptr;
         let pullAllowed = false;
         
-        for(let i=0; i<this.pondLevel; i++){
+        for(eggIndex; i<this.pondLevel; eggIndex++){
             if(this.eggs[eggIndex].flag == false){
                 break;
-            }else{
-                eggIndex++;
             }
         }
-        if(eggIndex != 3){
+        if(eggIndex < 3){
             ptr = this.eggs[eggIndex];
             pullAllowed = true;
         }else{
