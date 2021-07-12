@@ -54,7 +54,9 @@ class Play extends Phaser.Scene {
         this.canPress = false;
         this.displayMenu = false;
         this.addEssence = false;
+        this.pondLevel = 3;
         var rect;
+        this.eggs = [new spawnPositions(false, 150, 300), new spawnPositions(false, 300, 150), new spawnPositions(false, 450, 450)];
 
         //static menu setup
         this.uibar = this.add.image(0, game.config.height - 50, 'uibar').setOrigin(0,0);
@@ -257,46 +259,72 @@ class Play extends Phaser.Scene {
             }, this);
         }
         this.scoreText.text = this.score;
+
     }
 
     pullCreature(letter){
-        let pull;
-        switch(letter){
-            case 'C':
-                while(true){
-                    pull = Phaser.Math.RND.pick(commonCreatures);
-                    console.log(pull);
-                    if(collectedCreatures.indexOf(pull) == -1){
-                        collectedCreatures += pull;
-                        commonsPulled++;
-                        break;
-                    }
-                }
+        //manage eggs mechanic
+        let eggIndex = 0;
+        let ptr;
+        let pullAllowed = false;
+        
+        for(let i=0; i<this.pondLevel; i++){
+            if(this.eggs[eggIndex].flag == false){
                 break;
-            case 'R':
-                while(true){
-                    pull = Phaser.Math.RND.pick(rareCreatures);
-                    console.log(pull);
-                    if(collectedCreatures.indexOf(pull) == -1){
-                        collectedCreatures += pull;
-                        raresPulled++;
-                        break;
-                    }
-                }
-                break;
-            case 'L':
-                while(true){
-                    pull = Phaser.Math.RND.pick(legendaryCreatures);
-                    console.log(pull);
-                    if(collectedCreatures.indexOf(pull) == -1){
-                        collectedCreatures += pull;
-                        legendariesPulled++;
-                        break;
-                    }
-                }
-                break;
+            }else{
+                eggIndex++;
+            }
         }
-        console.log(collectedCreatures);
+        if(eggIndex != 3){
+            ptr = this.eggs[eggIndex];
+            pullAllowed = true;
+        }else{
+            pullAllowed = false;
+        }
+
+        if(pullAllowed){
+            let pull;
+            switch(letter){
+                case 'C':
+                    ptr.object = this.add.sprite(this, ptr.x, ptr.y, 'holder');
+                    while(true){
+                        pull = Phaser.Math.RND.pick(commonCreatures);
+                        console.log(pull);
+                        if(collectedCreatures.indexOf(pull) == -1){
+                            collectedCreatures += pull;
+                            commonsPulled++;
+                            break;
+                        }
+                    }
+                    break;
+                case 'R':
+                    ptr.object = this.add.sprite(this, ptr.x, ptr.y, 'holder');
+                    while(true){
+                        pull = Phaser.Math.RND.pick(rareCreatures);
+                        console.log(pull);
+                        if(collectedCreatures.indexOf(pull) == -1){
+                            collectedCreatures += pull;
+                            raresPulled++;
+                            break;
+                        }
+                    }
+                    break;
+                case 'L':
+                    ptr.object = this.add.sprite(this, ptr.x, ptr.y, 'holder');
+                    while(true){
+                        pull = Phaser.Math.RND.pick(legendaryCreatures);
+                        console.log(pull);
+                        if(collectedCreatures.indexOf(pull) == -1){
+                            collectedCreatures += pull;
+                            legendariesPulled++;
+                            break;
+                       }
+                   }
+                   break;
+            }
+        }else{
+            //Can add error msg popup here
+        }
     }
 
     pondTabDisable(){
@@ -319,5 +347,13 @@ class Play extends Phaser.Scene {
         if(this.creatures.texture.key != 'creaturesTab'){
             this.creatures.setTexture('creaturesTab');
         }
+    }
+}
+class spawnPositions{
+    constructor(flag, x, y){
+        this.flag = flag;
+        this.x = x;
+        this.y = y;
+        this.object;
     }
 }
