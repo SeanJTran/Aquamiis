@@ -12,7 +12,7 @@ class Play extends Phaser.Scene {
         this.load.image('podsTab', './assets/uiassets/pinkPodsTab.png');
         this.load.image('creaturesTab', './assets/uiassets/pinkCreaturesTab.png');
         this.load.image('pondTab', './assets/uiassets/pinkPondTab.png');
-
+        this.load.spritesheet('drop', './assets/raindrop.png', {frameWidth: 23, frameHeight: 59});
         this.load.image('wpodsTab', './assets/uiassets/whitePodsTab.png');
         this.load.image('wcreaturesTab', './assets/uiassets/whiteCreaturesTab.png');
         this.load.image('wpondTab', './assets/uiassets/whitePondTab.png');
@@ -47,6 +47,13 @@ class Play extends Phaser.Scene {
 
         this.add.image(0, 0, 'bg').setOrigin(0,0);
 
+        this.drop = this.anims.create({
+            key: 'drops',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 3, first: 0}),
+            frameRate: 10
+        })
+        
         //initiallization section
         const TOP = 3;
         const MIDDLE = 2;
@@ -265,9 +272,11 @@ class Play extends Phaser.Scene {
     }
     update(){
         if(this.pointer.leftButtonDown() && this.canPress){
-            this.sound.play('water', { volume: 0.3 });
+            this.sound.play('water', { volume: 0.1 });
             this.canPress = false;
             this.score += 1;
+            this.dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
+            this.dropper.play('drops');
         }
         if(this.pointer.leftButtonReleased() &&  !this.canPress){
             this.canPress = true;
