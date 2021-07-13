@@ -280,7 +280,7 @@ class Play extends Phaser.Scene {
                 this.vd = true;
                 this.dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
                 this.dropper.play('drops');
-                this.time.delayedCall(500, () => {
+                this.time.delayedCall(250, () => {
                     this.dropper.destroy();
                     this.vd = false;
                 });
