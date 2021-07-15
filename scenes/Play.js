@@ -23,9 +23,9 @@ class Play extends Phaser.Scene {
         this.load.image('rcc', './assets/uiassets/rarePod.png');
         this.load.image('lcc', './assets/uiassets/legendaryPod.png');
 
-        this.load.spritesheet('commonEgg', './assets/commonEggAtlas.png', {frameWidth: 75, frameHeight: 51});
-        this.load.spritesheet('rareEgg', './assets/rareEggAtlas.png', {frameWidth: 75, frameHeight: 51});
-        this.load.spritesheet('legendaryEgg', './assets/legendaryEggAtlas.png', {frameWidth: 75, frameHeight: 51});
+        this.load.spritesheet('commonEgg', './assets/basicEggAtlas.png', {frameWidth: 75, frameHeight: 63});
+        this.load.spritesheet('rareEgg', './assets/rareEggAtlas.png', {frameWidth: 75, frameHeight: 63});
+        this.load.spritesheet('legendaryEgg', './assets/legendaryEggAtlas.png', {frameWidth: 75, frameHeight: 63});
         
     }
 
@@ -49,7 +49,7 @@ class Play extends Phaser.Scene {
 
         this.drop = this.anims.create({
             key: 'drops',
-            repeat: 10,
+            repeat: 3,
             frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 4, first: 0}),
             frameRate: 8
         })
@@ -66,6 +66,7 @@ class Play extends Phaser.Scene {
         this.vd = false;
         this.displayMenu = false;
         this.addEssence = false;
+        this.timeStep = false;
         this.pondLevel = 3;
         var rect;
         this.eggs = [new spawnPositions(false, 250, 400), new spawnPositions(false, 400, 450), new spawnPositions(false, 650, 425)];
@@ -290,6 +291,19 @@ class Play extends Phaser.Scene {
             this.canPress = true;
         }
 
+        if(!this.timeStep){
+            this.timeStep = true;
+            for(let i=0; i<this.pondLevel; i++){
+                if(this.eggs[i].flag){
+                    this.eggs[i].timer -= 1000;
+                    this.eggs[i].text.setText(this.formatTime(this.eggs[i].timer));
+                }
+            }
+            this.time.delayedCall(1000, () => {
+                this.timeStep = false;
+            }, this);
+        }
+
         //add score passivly every 10 seconds
         if(!this.addEssence){
             this.addEssence = true;
@@ -307,9 +321,9 @@ class Play extends Phaser.Scene {
         let eggIndex = 0;
         let ptr;
         let pullAllowed = false;
-        const LEG_TIME = 30 * 1000;
-        const RARE_TIME = 15 * 1000;
-        const COM_TIME = 8 * 1000;
+        const LEG_TIME = 70 * 1000;
+        const RARE_TIME = 60 * 1000;
+        const COM_TIME = 20 * 1000;
         
         for(eggIndex; eggIndex<this.pondLevel; eggIndex++){
             if(this.eggs[eggIndex].flag == false){
@@ -331,6 +345,8 @@ class Play extends Phaser.Scene {
             switch(letter){
                 case 'C':
                     ptr.object = this.add.sprite(ptr.x, ptr.y, 'holder').play('commonBob');
+                    ptr.text = this.add.text(ptr.x - 18, ptr.y + 13, this.formatTime(COM_TIME));
+                    ptr.timer = COM_TIME;
                     while(true){
                         pull = Phaser.Math.RND.pick(commonCreatures);
                         console.log(pull);
@@ -338,6 +354,7 @@ class Play extends Phaser.Scene {
                             this.time.delayedCall(COM_TIME, () => {
                                 ptr.flag = false;
                                 ptr.object.destroy();
+                                ptr.text.destroy();
                             }, this);
                             collectedCreatures += pull;
                             commonsPulled++;
@@ -348,6 +365,8 @@ class Play extends Phaser.Scene {
                     break;
                 case 'R':
                     ptr.object = this.add.sprite(ptr.x, ptr.y, 'holder').play('rareBob');
+                    ptr.text = this.add.text(ptr.x - 18, ptr.y + 13, this.formatTime(RARE_TIME));
+                    ptr.timer = RARE_TIME;
                     while(true){
                         pull = Phaser.Math.RND.pick(rareCreatures);
                         console.log(pull);
@@ -355,6 +374,7 @@ class Play extends Phaser.Scene {
                             this.time.delayedCall(RARE_TIME, () => {
                                 ptr.flag = false;
                                 ptr.object.destroy();
+                                ptr.text.destroy();
                             }, this);
                             collectedCreatures += pull;
                             raresPulled++;
@@ -365,6 +385,8 @@ class Play extends Phaser.Scene {
                     break;
                 case 'L':
                     ptr.object = this.add.sprite(ptr.x, ptr.y, 'holder').play('legendaryBob');
+                    ptr.text = this.add.text(ptr.x - 18, ptr.y + 13, this.formatTime(LEG_TIME));
+                    ptr.timer = LEG_TIME;
                     while(true){
                         pull = Phaser.Math.RND.pick(legendaryCreatures);
                         console.log(pull);
@@ -372,6 +394,7 @@ class Play extends Phaser.Scene {
                             this.time.delayedCall(LEG_TIME, () => {
                                 ptr.flag = false;
                                 ptr.object.destroy();
+                                ptr.text.destroy();
                             }, this);
                             collectedCreatures += pull;
                             legendariesPulled++;
@@ -404,6 +427,34 @@ class Play extends Phaser.Scene {
             this.creatures.setTexture('creaturesTab');
         }
     }
+
+    formatTime(startTime){
+        let converted = startTime/1000;
+        let minutes = 0;
+        let seconds = 0;
+        let string = "";
+        seconds = converted%60;
+        minutes = converted/60;
+        if(minutes > 1){
+            if(minutes > 10){
+                string += minutes + ":";
+            }else{
+                string += "0"+minutes + ":";
+            }
+        }else{
+            string += "00:";
+        }
+        if(seconds > 1){
+            if(seconds > 10){
+                string += seconds;
+            }else{
+                string += "0" + seconds;
+            }
+        }else{
+            string += "01";
+        }
+        return string;
+    }
 }
 
 class spawnPositions{
@@ -412,5 +463,7 @@ class spawnPositions{
         this.x = x;
         this.y = y;
         this.object;
+        this.timer;
+        this.text;
     }
 }
