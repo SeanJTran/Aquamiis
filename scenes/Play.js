@@ -12,7 +12,7 @@ class Play extends Phaser.Scene {
         this.load.image('podsTab', './assets/uiassets/pinkPodsTab.png');
         this.load.image('creaturesTab', './assets/uiassets/pinkCreaturesTab.png');
         this.load.image('pondTab', './assets/uiassets/pinkPondTab.png');
-        this.load.spritesheet('drop', './assets/raindrop.png', {frameWidth: 23, frameHeight: 59});
+        this.load.spritesheet('drop', './assets/rain.png', {frameWidth: 23, frameHeight: 118});
         this.load.image('wpodsTab', './assets/uiassets/whitePodsTab.png');
         this.load.image('wcreaturesTab', './assets/uiassets/whiteCreaturesTab.png');
         this.load.image('wpondTab', './assets/uiassets/whitePondTab.png');
@@ -49,9 +49,9 @@ class Play extends Phaser.Scene {
 
         this.drop = this.anims.create({
             key: 'drops',
-            repeat: -1,
-            frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 2, first: 0}),
-            frameRate: 4
+            repeat: 10,
+            frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 4, first: 0}),
+            frameRate: 8
         })
         
         //initiallization section
@@ -276,15 +276,15 @@ class Play extends Phaser.Scene {
             this.sound.play('water', { volume: 0.1 });
             this.canPress = false;
             this.score += 1;
-            if (!this.vd) {
-                this.vd = true;
-                this.dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
-                this.dropper.play('drops');
-                this.time.delayedCall(250, () => {
-                    this.dropper.destroy();
-                    this.vd = false;
-                });
-            }
+            //if (!this.vd) {
+                //this.vd = true;
+                let dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
+                dropper.play('drops');
+                this.time.delayedCall(4000, () => {
+                    dropper.destroy();
+                    //this.vd = false;
+                }, this);
+            //}
         }
         if(this.pointer.leftButtonReleased() &&  !this.canPress){
             this.canPress = true;
@@ -307,9 +307,9 @@ class Play extends Phaser.Scene {
         let eggIndex = 0;
         let ptr;
         let pullAllowed = false;
-        const LEG_TIME = 9000;
-        const RARE_TIME = 6000;
-        const COM_TIME = 3000;
+        const LEG_TIME = 30 * 1000;
+        const RARE_TIME = 15 * 1000;
+        const COM_TIME = 8 * 1000;
         
         for(eggIndex; eggIndex<this.pondLevel; eggIndex++){
             if(this.eggs[eggIndex].flag == false){
