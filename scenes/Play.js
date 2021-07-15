@@ -18,7 +18,6 @@ class Play extends Phaser.Scene {
         this.load.image('wpondTab', './assets/uiassets/whitePondTab.png');
 
         this.load.image('uibar', './assets/uiassets/uibar.png')
-
         this.load.image('ccc', './assets/uiassets/basicPod.png');
         this.load.image('rcc', './assets/uiassets/rarePod.png');
         this.load.image('lcc', './assets/uiassets/legendaryPod.png');
@@ -30,6 +29,9 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('commonEggR', './assets/basicEggReady.png', {frameWidth: 73, frameHeight: 80});
         this.load.spritesheet('rareEggR', './assets/rareEggReady.png', {frameWidth: 73, frameHeight: 80});
         this.load.spritesheet('legendaryEggR', './assets/legendaryEggReady.png', {frameWidth: 73, frameHeight: 80});
+
+        this.load.spritesheet('strawberry', './assets/rare_creatures/strawberry.png', {frameWidth: 80, frameHeight: 97});
+        this.load.spritesheet('narwhal', './assets/basic_creatures/narwhal.png', {frameWidth: 96, frameHeight: 74});
         
     }
 
@@ -114,20 +116,22 @@ class Play extends Phaser.Scene {
         this.buy3.alpha = 0;
         this.buy3.depth = MIDDLE;
 
+
+
         this.buy1.on('pointerdown', function(){
             //commonsPulled<4 prevents infinite loop in pullCreature DO NOT REMOVE
-            if(this.score >= 10 && commonsPulled<4){
+            if(this.score >= 10 && commonsPulled<1){
                 this.pullCreature('C');
             }
         }, this);
 
         this.buy2.on('pointerdown', function(){
-            if(this.score >= 100 && raresPulled<4){
+            if(this.score >= 100 && raresPulled<1){
                 this.pullCreature('R');
             }
         }, this);
         this.buy3.on('pointerdown', function(){
-            if(this.score >= 1000 && legendariesPulled<4){
+            if(this.score >= 1000 && legendariesPulled<1){
                 this.pullCreature('L');
             }
             
@@ -203,7 +207,7 @@ class Play extends Phaser.Scene {
         }, this);
 
         //pressed pond tab
-        this.pond.on('pointerdown', function(){
+         ('pointerdown', function(){
             console.log("pond clicked");
 
             //disable Creatures display
@@ -295,6 +299,25 @@ class Play extends Phaser.Scene {
             frameRate: 2
         });
 
+        //creature sprite animations
+        this.strawberryAnim = this.anims.create({
+            key: 'strawberryAnim',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('strawberry', {start: 0, end: 1, first: 0}),
+            frameRate: 2
+        });
+        this.narwhalAnim = this.anims.create({
+            key: 'narwhalAnim',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('narwhal', {start: 0, end: 1, first: 0}),
+            frameRate: 2
+        });
+
+        //creature sprite scene initialization
+        this.strawberry = this.add.sprite(600, 200, 'holder').play('strawberryAnim');
+        this.strawberry.alpha = 0;
+        this.narwhal = this.add.sprite(400, 350, 'holder').play('narwhalAnim');
+        this.narwhal.alpha = 0;
 
     }
     update(){
@@ -350,6 +373,7 @@ class Play extends Phaser.Scene {
         const RARE_TIME = 60 * 1000;
         const COM_TIME = 20 * 1000;
         
+        //find spawn location for egg
         for(eggIndex; eggIndex<this.pondLevel; eggIndex++){
             if(this.eggs[eggIndex].flag == false){
                 break;
@@ -377,10 +401,11 @@ class Play extends Phaser.Scene {
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
                             this.time.delayedCall(COM_TIME, () => {
-                                //ptr.flag = false;
-                                //ptr.object.destroy();
+                                ptr.flag = false;
+                                ptr.object.destroy();
                                 ptr.text.destroy();
-                                ptr.object.play('commonReady');
+                                //ptr.object.play('commonReady');
+                                this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;
                             commonsPulled++;
@@ -398,10 +423,11 @@ class Play extends Phaser.Scene {
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
                             this.time.delayedCall(RARE_TIME, () => {
-                                //ptr.flag = false;
-                                //ptr.object.destroy();
+                                ptr.flag = false;
+                                ptr.object.destroy();
                                 ptr.text.destroy();
-                                ptr.object.play('rareReady');
+                                //ptr.object.play('rareReady');
+                                this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;
                             raresPulled++;
@@ -419,10 +445,11 @@ class Play extends Phaser.Scene {
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
                             this.time.delayedCall(LEG_TIME, () => {
-                                //ptr.flag = false;
-                                //ptr.object.destroy();
+                                ptr.flag = false;
+                                ptr.object.destroy();
                                 ptr.text.destroy();
-                                ptr.object.play('legendaryReady');
+                                //ptr.object.play('legendaryReady');
+                                this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;
                             legendariesPulled++;
@@ -482,6 +509,17 @@ class Play extends Phaser.Scene {
             string += "01";
         }
         return string;
+    }
+
+    displayCreature(name){
+        switch(name){
+            case('strawberry'):
+                this.strawberry.alpha = 1;
+                break;
+            case('narwhal'):
+                this.narwhal.alpha = 1;
+                break;
+        }
     }
 }
 
