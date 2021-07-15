@@ -26,6 +26,10 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('commonEgg', './assets/basicEggAtlas.png', {frameWidth: 75, frameHeight: 63});
         this.load.spritesheet('rareEgg', './assets/rareEggAtlas.png', {frameWidth: 75, frameHeight: 63});
         this.load.spritesheet('legendaryEgg', './assets/legendaryEggAtlas.png', {frameWidth: 75, frameHeight: 63});
+
+        this.load.spritesheet('commonEggR', './assets/basicEggReady.png', {frameWidth: 73, frameHeight: 80});
+        this.load.spritesheet('rareEggR', './assets/rareEggReady.png', {frameWidth: 73, frameHeight: 80});
+        this.load.spritesheet('legendaryEggR', './assets/legendaryEggReady.png', {frameWidth: 73, frameHeight: 80});
         
     }
 
@@ -251,6 +255,7 @@ class Play extends Phaser.Scene {
             
         }, this);
 
+        //eggs waiting animation
         this.commonBob = this.anims.create({
             key: 'commonBob',
             repeat: -1,
@@ -268,6 +273,26 @@ class Play extends Phaser.Scene {
             repeat: -1,
             frames: this.anims.generateFrameNumbers('legendaryEgg', {start: 0, end: 3, first: 0}),
             frameRate: 4
+        });
+
+        //eggs ready to hatch animation
+        this.commonReady = this.anims.create({
+            key: 'commonReady',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('commonEggR', {start: 0, end: 1, first: 0}),
+            frameRate: 2
+        });
+        this.rareReady = this.anims.create({
+            key: 'rareReady',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('rareEggR', {start: 0, end: 1, first: 0}),
+            frameRate: 2
+        });
+        this.legendaryReady = this.anims.create({
+            key: 'legendaryReady',
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers('legendaryEggR', {start: 0, end: 1, first: 0}),
+            frameRate: 2
         });
 
 
@@ -352,9 +377,10 @@ class Play extends Phaser.Scene {
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
                             this.time.delayedCall(COM_TIME, () => {
-                                ptr.flag = false;
-                                ptr.object.destroy();
+                                //ptr.flag = false;
+                                //ptr.object.destroy();
                                 ptr.text.destroy();
+                                ptr.object.play('commonReady');
                             }, this);
                             collectedCreatures += pull;
                             commonsPulled++;
@@ -372,9 +398,10 @@ class Play extends Phaser.Scene {
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
                             this.time.delayedCall(RARE_TIME, () => {
-                                ptr.flag = false;
-                                ptr.object.destroy();
+                                //ptr.flag = false;
+                                //ptr.object.destroy();
                                 ptr.text.destroy();
+                                ptr.object.play('rareReady');
                             }, this);
                             collectedCreatures += pull;
                             raresPulled++;
@@ -392,9 +419,10 @@ class Play extends Phaser.Scene {
                         console.log(pull);
                         if(collectedCreatures.indexOf(pull) == -1){
                             this.time.delayedCall(LEG_TIME, () => {
-                                ptr.flag = false;
-                                ptr.object.destroy();
+                                //ptr.flag = false;
+                                //ptr.object.destroy();
                                 ptr.text.destroy();
+                                ptr.object.play('legendaryReady');
                             }, this);
                             collectedCreatures += pull;
                             legendariesPulled++;
@@ -436,7 +464,7 @@ class Play extends Phaser.Scene {
         seconds = converted%60;
         minutes = converted/60;
         if(minutes > 1){
-            if(minutes > 10){
+            if(minutes >= 10){
                 string += minutes + ":";
             }else{
                 string += "0"+minutes + ":";
@@ -445,7 +473,7 @@ class Play extends Phaser.Scene {
             string += "00:";
         }
         if(seconds > 1){
-            if(seconds > 10){
+            if(seconds >= 10){
                 string += seconds;
             }else{
                 string += "0" + seconds;
