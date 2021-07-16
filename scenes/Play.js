@@ -55,9 +55,9 @@ class Play extends Phaser.Scene {
 
         this.drop = this.anims.create({
             key: 'drops',
-            repeat: 3,
+            repeat: 2,
             frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 4, first: 0}),
-            frameRate: 8
+            frameRate: 4
         })
         
         //initiallization section
@@ -181,9 +181,6 @@ class Play extends Phaser.Scene {
             this.pond.disableInteractive();
             this.pods.disableInteractive();
             this.creatures.disableInteractive();
-            //this.pond.setTexture('pondTab'); redudant
-            //this.pods.setTexture('podsTab');  redundant within podsTabDisable()
-            //this.creatures.setTexture('creaturesTab'); redudant
             this.pond.x = 0;
             this.pond.y = game.config.height - 50;
             this.pods.x = 112;
@@ -207,7 +204,7 @@ class Play extends Phaser.Scene {
         }, this);
 
         //pressed pond tab
-         ('pointerdown', function(){
+        this.pond.on('pointerdown', function(){
             console.log("pond clicked");
 
             //disable Creatures display
@@ -325,15 +322,11 @@ class Play extends Phaser.Scene {
             this.sound.play('water', { volume: 0.1 });
             this.canPress = false;
             this.score += 1;
-            //if (!this.vd) {
-                //this.vd = true;
-                let dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
-                dropper.play('drops');
-                this.time.delayedCall(4000, () => {
-                    dropper.destroy();
-                    //this.vd = false;
-                }, this);
-            //}
+            let dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
+            dropper.play('drops');
+            this.time.delayedCall(2000, () => {
+                dropper.destroy();
+            }, this);
         }
         if(this.pointer.leftButtonReleased() &&  !this.canPress){
             this.canPress = true;

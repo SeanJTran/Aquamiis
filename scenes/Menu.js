@@ -43,6 +43,7 @@ class Menu extends Phaser.Scene{
             pan: 0
           }
           this.sound.play("clicks", clicksound);
+          this.sound.stopAll();
           this.scene.start("playScene");
       }
 
