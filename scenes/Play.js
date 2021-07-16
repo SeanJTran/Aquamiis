@@ -16,7 +16,7 @@ class Play extends Phaser.Scene {
         this.load.image('wpodsTab', './assets/uiassets/whitePodsTab.png');
         this.load.image('wcreaturesTab', './assets/uiassets/whiteCreaturesTab.png');
         this.load.image('wpondTab', './assets/uiassets/whitePondTab.png');
-
+        this.load.audio('hat', './assets/hatch.wav');
         this.load.image('uibar', './assets/uiassets/uibar.png')
         this.load.image('ccc', './assets/uiassets/basicPod.png');
         this.load.image('rcc', './assets/uiassets/rarePod.png');
@@ -405,6 +405,7 @@ class Play extends Phaser.Scene {
                                 ptr.object.destroy();
                                 ptr.text.destroy();
                                 //ptr.object.play('commonReady');
+                                this.sound.play('hat', { volume: 5 });
                                 this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;
@@ -427,6 +428,7 @@ class Play extends Phaser.Scene {
                                 ptr.object.destroy();
                                 ptr.text.destroy();
                                 //ptr.object.play('rareReady');
+                                this.sound.play('hat', { volume: 5 });
                                 this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;
@@ -449,6 +451,7 @@ class Play extends Phaser.Scene {
                                 ptr.object.destroy();
                                 ptr.text.destroy();
                                 //ptr.object.play('legendaryReady');
+                                this.sound.play('hat', { volume: 5 });
                                 this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;

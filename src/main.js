@@ -7,7 +7,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 960,
     height: 540,
-    scene: [Menu, Play],
+    scene: [Menu, Credits, Play],
     physics: {
         default: 'arcade',
         arcade: {
@@ -31,3 +31,5 @@ var raresPulled = 0;
 var legendariesPulled = 0;
 
 let keySpace;
+let keyM;
+let keyC;
