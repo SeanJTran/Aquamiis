@@ -11,7 +11,7 @@ class Menu extends Phaser.Scene{
 
     create(){
       this.backgroundmenu = this.add.tileSprite(0, 0, 960 , 540, 'bgmenu').setOrigin(0, 0);
-      //keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+      keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
 
       // initialize
       this.pointer = game.input.activePointer;
@@ -20,6 +20,9 @@ class Menu extends Phaser.Scene{
     }
 
     update(){
+      if (Phaser.Input.Keyboard.JustDown(keyC)) {
+        this.scene.start('creditScene');    
+      }
       var leftDown = this.pointer.leftButtonDown();
       if(this.pointer.leftButtonReleased()){
         this.justClicked = false;
