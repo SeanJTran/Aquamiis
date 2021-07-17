@@ -60,7 +60,7 @@ class Play extends Phaser.Scene {
         this.drop = this.anims.create({
             key: 'drops',
             repeat: 2,
-            frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 4, first: 0}),
+            frames: this.anims.generateFrameNumbers('drop', {start: 0, end: 3, first: 0}),
             frameRate: 4
         })
         
@@ -92,13 +92,13 @@ class Play extends Phaser.Scene {
         this.closeMenuButton.depth = TOP;
         this.closeMenuButton.alpha = 0;
 
-        this.pond = this.add.image(0, game.config.height - 50, 'pondTab').setOrigin(0,1);
+        this.pond = this.add.image(-100, -100, 'pondTab').setOrigin(0,1);
         this.pond.depth = BOTTOM;
 
-        this.pods = this.add.image(112, game.config.height - 50, 'podsTab').setOrigin(0,1);
+        this.pods = this.add.image(-100, -100, 'podsTab').setOrigin(0,1);
         this.pods.depth = BOTTOM;
 
-        this.creatures = this.add.image(112*2, game.config.height - 50, 'creaturesTab').setOrigin(0,1);
+        this.creatures = this.add.image(-100, -100, 'creaturesTab').setOrigin(0,1);
         this.creatures.depth = BOTTOM;
 
         this.buy1 = this.add.image(game.config.width/4 * 1, game.config.height - 55, 'ccc').setOrigin(0,1);
@@ -175,12 +175,19 @@ class Play extends Phaser.Scene {
             this.pond.disableInteractive();
             this.pods.disableInteractive();
             this.creatures.disableInteractive();
-            this.pond.x = 0;
+            this.pond.x = -100;
+            this.pond.y = -100;
+            this.pods.x = -100;
+            this.pods.y = -100;
+            this.creatures.x = -100;
+            this.creatures.y = -100;
+
+            /*this.pond.x = 0;
             this.pond.y = game.config.height - 50;
             this.pods.x = 112;
             this.pods.y = game.config.height - 50;
             this.creatures.x = 112*2;
-            this.creatures.y = game.config.height - 50;
+            this.creatures.y = game.config.height - 50; */
 
             this.menuButton.setInteractive();
 
