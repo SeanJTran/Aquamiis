@@ -417,7 +417,7 @@ class Play extends Phaser.Scene {
                                 ptr.object.destroy();
                                 ptr.text.destroy();
                                 //ptr.object.play('commonReady');
-                                this.sound.play('hat', { volume: 0.5 });
+                                this.sound.play('hat', { volume: 0.3 });
                                 this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;
@@ -441,7 +441,7 @@ class Play extends Phaser.Scene {
                                 ptr.object.destroy();
                                 ptr.text.destroy();
                                 //ptr.object.play('rareReady');
-                                this.sound.play('hat', { volume: 0.5 });
+                                this.sound.play('hat', { volume: 0.3 });
                                 this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;
@@ -464,7 +464,7 @@ class Play extends Phaser.Scene {
                                 ptr.object.destroy();
                                 ptr.text.destroy();
                                 //ptr.object.play('legendaryReady');
-                                this.sound.play('hat', { volume: 0.5 });
+                                this.sound.play('hat', { volume: 0.3 });
                                 this.displayCreature(pull);
                             }, this);
                             collectedCreatures += pull;

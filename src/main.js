@@ -8,13 +8,17 @@ let config = {
     width: 960,
     height: 540,
     scene: [Menu, Credits, Intro, Play],
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     physics: {
         default: 'arcade',
         arcade: {
             gravity: {y: 1000},
             debug: false
         }
-    }
+    },
 }
 
 let game = new Phaser.Game(config);
@@ -32,7 +36,6 @@ var legendariesPulled = 0;
 const MAX_COM = 3; // change these as creatures get added to the arrays above
 const MAX_RARE = 2;
 const MAX_LEG = 1;
-
 let keySpace;
 let keyM;
 let keyC;
