@@ -47,14 +47,7 @@ class Menu extends Phaser.Scene{
           }
           this.sound.play("clicks", clicksound);
           //this.sound.stopAll();
-          this.scene.start("introScene");
+          this.scene.start('introScene');
       }
-
-      /* ----  Keyboard input --------
-      if (Phaser.Input.Keyboard.JustDown(keySpace)) {
-        console.log("Playing");
-        this.scene.start("playScene");
-      }
-      */
     }
 }
