@@ -389,9 +389,9 @@ class Play extends Phaser.Scene {
         let eggIndex = 0;
         let ptr;
         let pullAllowed = false;
-        const LEG_TIME = 15 * 1000;
-        const RARE_TIME = 10 * 1000;
-        const COM_TIME = 5 * 1000;
+        const LEG_TIME = 45 * 1000;
+        const RARE_TIME = 20 * 1000;
+        const COM_TIME = 10 * 1000;
         
         //find spawn location for egg
         for(eggIndex; eggIndex<this.pondLevel; eggIndex++){
