@@ -16,7 +16,18 @@ class Credits extends Phaser.Scene{
 
     update(){
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
-            this.scene.start('menuScene');    
+            this.scene.start('menuScene');   
+            let clicksound = {
+                mute: false,
+                volume: 2,
+                rate: 0.9,
+                detune: 0,
+                seek: 0,
+                loop: false,
+                delay: 0,
+                pan: 0
+            }
+            this.sound.play("clicks", clicksound); 
         }
     }
 }

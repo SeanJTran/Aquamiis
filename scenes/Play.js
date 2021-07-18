@@ -348,7 +348,7 @@ class Play extends Phaser.Scene {
         if(this.pointer.leftButtonDown() && this.canPress){
             this.sound.play('water', { volume: 0.1 });
             this.canPress = false;
-            this.score += 1;
+            this.score += 5;
             let dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
             dropper.play('drops');
             this.time.delayedCall(2000, () => {

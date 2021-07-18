@@ -15,26 +15,30 @@ class Menu extends Phaser.Scene{
 
       // initialize
       this.pointer = game.input.activePointer;
-      this.menuStart = false;
+      this.menuStart = true;
       this.justClicked = false;
     }
 
     update(){
       if (Phaser.Input.Keyboard.JustDown(keyC)) {
         this.scene.start('creditScene');    
+        let clicksound = {
+          mute: false,
+          volume: 2,
+          rate: 0.9,
+          detune: 0,
+          seek: 0,
+          loop: false,
+          delay: 0,
+          pan: 0
+        }
+        this.sound.play("clicks", clicksound);
       }
       var leftDown = this.pointer.leftButtonDown();
       if(this.pointer.leftButtonReleased()){
         this.justClicked = false;
       }
-      if(leftDown && !this.menuStart && !this.justClicked){
-        console.log("PreStart");
-        this.sound.play('menuMusic', {loop: true, volume: 0.2});
-        this.menuStart = true;
-        this.justClicked = true;
-      }
       if(leftDown && this.menuStart && !this.justClicked){
-          console.log("PostStart");
           let clicksound = {
             mute: false,
             volume: 2,
