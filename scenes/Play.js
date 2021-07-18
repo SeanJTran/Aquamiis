@@ -155,12 +155,12 @@ class Play extends Phaser.Scene {
             this.pond.setInteractive();
             this.pods.setInteractive();
             this.creatures.setInteractive();
-            this.pond.x = 0;
-            this.pond.y = game.config.height - 150;
-            this.pods.x = 112;
+            //this.pond.x = 0;
+            //this.pond.y = game.config.height - 150;
+            this.pods.x = 0;
             this.pods.y = game.config.height - 150;
-            this.creatures.x = 112*2;
-            this.creatures.y = game.config.height - 150;
+            //this.creatures.x = 112*2;
+            //this.creatures.y = game.config.height - 150;
         }, this);
 
 

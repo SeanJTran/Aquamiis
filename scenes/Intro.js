@@ -10,14 +10,20 @@ class Intro extends Phaser.Scene {
         this.load.image('lore4', './assets/lore4.png');
         this.load.image('tutorial', './assets/tutorial.png');
         this.load.image('tutorial2', './assets/tutorial2.png');
+        this.load.image('tutorial3', './assets/tutorial3.png');
+        this.load.image('tutorial4', './assets/tutorial4.png');
+        this.load.image('tutorial5', './assets/tutorial5.png');
+        this.load.image('tutorial6', './assets/tutorial6.png');
+        this.load.image('tutorial7', './assets/tutorial7.png');
         this.load.audio('clicks', './assets/clicks.wav');
     }
 
     create(){
-        this.slides = ['tutorial', 'tutorial2', 'lore1', 'lore2', 'lore3', 'lore4'];
+        this.slides = ['lore1', 'lore2', 'lore3', 'lore4', 'tutorial', 'tutorial2', 'tutorial3', 'tutorial4', 'tutorial5', 
+        'tutorial6', 'tutorial7'];
         this.justClicked = true;
         this.slideIndex = 0;
-        this.bg = this.add.image(0, 0, 'tutorial').setOrigin(0,0);  
+        this.bg = this.add.image(0, 0, 'lore1').setOrigin(0,0);  
         //this.add.rectangle(100,200, 200, 400, 0xfff)
         this.pointer = game.input.activePointer;
     }
@@ -29,7 +35,7 @@ class Intro extends Phaser.Scene {
           this.justClicked = false;
         }
         if(leftDown && !this.justClicked){
-            if(this.bg.texture.key == 'lore4'){
+            if(this.bg.texture.key == 'tutorial7'){
                 //console.log("swap");
                 this.sound.stopAll();
                 this.scene.start("playScene");
