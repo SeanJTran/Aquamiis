@@ -1,13 +1,14 @@
 /*
 Collaborators: Alicia Zhen, Joe Carter, Sean Tran
-Game Title:
-Date Completed:
+Game Title: Aquamiis
+Date Completed: 7/22/2021
 */
 let config = {
     type: Phaser.CANVAS,
     width: 960,
     height: 540,
     scene: [Menu, Credits, Intro, Play],
+    // Referenced for scale: https://photonstorm.github.io/phaser3-docs/Phaser.Scale.ScaleManager.html
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
