@@ -36,7 +36,8 @@ class Play extends Phaser.Scene {
         this.load.image('prince', './assets/legendary_creatures/prince.png');
         this.load.image('onion-chan', './assets/basic_creatures/onion-chan.png');
         this.load.image('electro', './assets/basic_creatures/electro.png');
-        
+        this.load.image('Truffle', './assets/rare_creatures/Truffle.png');
+        this.load.image('Cotton_Candy', './assets/rare_creatures/Cotton_Candy.png');
     }
 
     create() {
@@ -342,6 +343,10 @@ class Play extends Phaser.Scene {
         this.electro.alpha = 0;
         this.onion_chan = this.add.sprite(300, 200, 'onion-chan');
         this.onion_chan.alpha = 0;
+        this.Truffle = this.add.sprite(750, 410, 'Truffle');
+        this.Truffle.alpha = 0;
+        this.Cotton_Candy = this.add.sprite(450, 240, 'Cotton_Candy');
+        this.Cotton_Candy.alpha = 0;
 
     }
     update(){
@@ -553,6 +558,12 @@ class Play extends Phaser.Scene {
                 break;
             case('onion-chan'):
                 this.onion_chan.alpha = 1;
+                break;
+            case('Truffle'):
+                this.Truffle.alpha = 1;
+                break;
+            case('Cotton_Candy'):
+                this.Cotton_Candy.alpha = 1;
                 break;
         }
     }
