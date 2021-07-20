@@ -118,6 +118,7 @@ class Play extends Phaser.Scene {
 
 
         this.buy1.on('pointerdown', function(){
+            this.score -= 5;
             if(commonsPulled >= MAX_COM-1){
                 this.buy1.alpha = 0.5;
             }
@@ -127,6 +128,7 @@ class Play extends Phaser.Scene {
         }, this);
 
         this.buy2.on('pointerdown', function(){
+            this.score -= 5;
             if(raresPulled >= MAX_RARE-1){
                 this.buy2.alpha = 0.5;
             }
@@ -135,6 +137,7 @@ class Play extends Phaser.Scene {
             }
         }, this);
         this.buy3.on('pointerdown', function(){
+            this.score -= 5;
             if(legendariesPulled >= MAX_LEG-1){
                 this.buy3.alpha = 0.5;
             }
