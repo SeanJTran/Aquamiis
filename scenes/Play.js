@@ -30,7 +30,7 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('rareEggR', './assets/rareEggReady.png', {frameWidth: 73, frameHeight: 80});
         this.load.spritesheet('legendaryEggR', './assets/legendaryEggReady.png', {frameWidth: 73, frameHeight: 80});
 
-        this.load.spritesheet('strawberry', './assets/rare_creatures/strawberry.png', {frameWidth: 80, frameHeight: 97});
+        this.load.spritesheet('strawberry', './assets/legendary_creatures/strawberry.png', {frameWidth: 80, frameHeight: 97});
         this.load.spritesheet('narwhal', './assets/basic_creatures/narwhal.png', {frameWidth: 96, frameHeight: 74});
         this.load.spritesheet('blossom', './assets/basic_creatures/blossom.png', {frameWidth: 82, frameHeight: 66});
         this.load.image('prince', './assets/legendary_creatures/prince.png');
@@ -38,15 +38,17 @@ class Play extends Phaser.Scene {
         this.load.image('electro', './assets/rare_creatures/electro.png');
         this.load.image('Truffle', './assets/rare_creatures/Truffle.png');
         this.load.image('Cotton_Candy', './assets/rare_creatures/Cotton_Candy.png');
+        this.load.image('sheepish', './assets/rare_creatures/sheepish.png');
 
-        this.load.image('uistrawberry', './assets/rare_creatures/StrawberryPopup.png');
-        this.load.image('uinarwhal', './assets/basic_creatures/.png');
-        this.load.image('uiblossom', './assets/basic_creatures/.png');
-        this.load.image('uiprince', './assets/legendary_creatures/.png');
-        this.load.image('uionion-chan', './assets/basic_creatures/.png');
-        this.load.image('uielectro', './assets/rare_creatures/.png');
-        this.load.image('uiTruffle', './assets/rare_creatures/.png');
-        this.load.image('uiCotton_Candy', './assets/rare_creatures/.png')
+        this.load.image('uistrawberry', './assets/legendary_creatures/StrawberryPopup.png');
+        this.load.image('uinarwhal', './assets/basic_creatures/narwhalPopup.png');
+        this.load.image('uiblossom', './assets/basic_creatures/blossomPopup.png');
+        this.load.image('uiprince', './assets/legendary_creatures/princePopup.png');
+        this.load.image('uionion-chan', './assets/basic_creatures/onion-chanPopup.png');
+        this.load.image('uielectro', './assets/rare_creatures/electroPopup.png');
+        this.load.image('uiTruffle', './assets/rare_creatures/TrufflePopup.png');
+        this.load.image('uiCotton_Candy', './assets/rare_creatures/Cotton_CandyPopup.png');
+        this.load.image('uisheepish', './assets/rare_creatures/sheepishPopup.png');
     }
 
     create() {
@@ -361,6 +363,8 @@ class Play extends Phaser.Scene {
         this.Truffle.alpha = 0;
         this.Cotton_Candy = this.add.sprite(450, 240, 'Cotton_Candy');
         this.Cotton_Candy.alpha = 0;
+        this.sheepish = this.add.sprite(300, 270, 'sheepish');
+        this.sheepish.alpha = 0;
 
     }
     update(){
@@ -594,6 +598,10 @@ class Play extends Phaser.Scene {
             case('Cotton_Candy'):
                 this.Cotton_Candy.alpha = 1;
                 this.uiPopUps.enqueue('uiCotton_Candy');
+                break;
+            case('sheepish'):
+                this.sheepish.alpha = 1;
+                this.uiPopUps.enqueue('uisheepish');
                 break;
         }
     }
