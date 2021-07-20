@@ -35,10 +35,18 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('blossom', './assets/basic_creatures/blossom.png', {frameWidth: 82, frameHeight: 66});
         this.load.image('prince', './assets/legendary_creatures/prince.png');
         this.load.image('onion-chan', './assets/basic_creatures/onion-chan.png');
-        this.load.image('electro', './assets/basic_creatures/electro.png');
+        this.load.image('electro', './assets/rare_creatures/electro.png');
         this.load.image('Truffle', './assets/rare_creatures/Truffle.png');
         this.load.image('Cotton_Candy', './assets/rare_creatures/Cotton_Candy.png');
-        this.load.image('uistrawberry', './assets/rare_creatures/StrawberryPopup.png')
+
+        this.load.image('uistrawberry', './assets/rare_creatures/StrawberryPopup.png');
+        this.load.image('uinarwhal', './assets/basic_creatures/.png');
+        this.load.image('uiblossom', './assets/basic_creatures/.png');
+        this.load.image('uiprince', './assets/legendary_creatures/.png');
+        this.load.image('uionion-chan', './assets/basic_creatures/.png');
+        this.load.image('uielectro', './assets/rare_creatures/.png');
+        this.load.image('uiTruffle', './assets/rare_creatures/.png');
+        this.load.image('uiCotton_Candy', './assets/rare_creatures/.png')
     }
 
     create() {
@@ -81,6 +89,8 @@ class Play extends Phaser.Scene {
         this.pondLevel = 3;
         var rect;
         this.eggs = [new spawnPositions(false, 250, 400), new spawnPositions(false, 400, 450), new spawnPositions(false, 650, 425)];
+        this.uiPopUps = new Queue();
+        this.popupDisplayed = false;
 
         //static menu setup
         this.uibar = this.add.image(0, game.config.height - 50, 'uibar').setOrigin(0,0);
@@ -118,7 +128,7 @@ class Play extends Phaser.Scene {
 
 
         this.buy1.on('pointerdown', function(){
-            this.score -= 5;
+            this.score--;
             if(commonsPulled >= MAX_COM-1){
                 this.buy1.alpha = 0.5;
             }
@@ -128,7 +138,7 @@ class Play extends Phaser.Scene {
         }, this);
 
         this.buy2.on('pointerdown', function(){
-            this.score -= 5;
+            this.score--;
             if(raresPulled >= MAX_RARE-1){
                 this.buy2.alpha = 0.5;
             }
@@ -137,7 +147,7 @@ class Play extends Phaser.Scene {
             }
         }, this);
         this.buy3.on('pointerdown', function(){
-            this.score -= 5;
+            this.score--;
             if(legendariesPulled >= MAX_LEG-1){
                 this.buy3.alpha = 0.5;
             }
@@ -355,14 +365,22 @@ class Play extends Phaser.Scene {
     }
     update(){
         if(this.pointer.leftButtonDown() && this.canPress){
+            if(this.popupDisplayed){
+                this.popup.destroy();
+                this.popupDisplayed = false;
+            }
             this.sound.play('water', { volume: 0.1 });
             this.canPress = false;
-            this.score += 5;
+            this.score++;
             let dropper = this.add.sprite(this.pointer.x, this.pointer.y, 'drop').setOrigin(0, 0);
             dropper.play('drops');
             this.time.delayedCall(2000, () => {
                 dropper.destroy();
             }, this);
+        }
+        if(!this.uiPopUps.isEmpty() && !this.popupDisplayed){
+            this.popup = this.add.image(game.config.width/2, game.config.height/2, this.uiPopUps.dequeue());
+            this.popupDisplayed = true;
         }
         if(this.pointer.leftButtonReleased() &&  !this.canPress){
             this.canPress = true;
@@ -544,46 +562,68 @@ class Play extends Phaser.Scene {
     }
 
     displayCreature(name){
-        this.popup;
-        if(this.popup != null){
-            this.popup.destroy();
-        }
         switch(name){
             case('strawberry'):
                 this.strawberry.alpha = 1;
-                this.popup = this.add.image(game.config.width/2, game.config.height/2, 'uistrawberry');
+                this.uiPopUps.enqueue('uistrawberry');
                 break;
             case('narwhal'):
                 this.narwhal.alpha = 1;
+                this.uiPopUps.enqueue('uinarwhal');
                 break;
             case('prince'):
                 this.prince.alpha = 1;
+                this.uiPopUps.enqueue('uiprince');
                 break;
             case('blossom'):
                 this.blossom.alpha = 1;
+                this.uiPopUps.enqueue('uiblossom');
                 break;
             case('electro'):
                 this.electro.alpha = 1;
+                this.uiPopUps.enqueue('uielectro');
                 break;
             case('onion-chan'):
                 this.onion_chan.alpha = 1;
+                this.uiPopUps.enqueue('uionion-chan');
                 break;
             case('Truffle'):
                 this.Truffle.alpha = 1;
+                this.uiPopUps.enqueue('uiTruffle');
                 break;
             case('Cotton_Candy'):
                 this.Cotton_Candy.alpha = 1;
+                this.uiPopUps.enqueue('uiCotton_Candy');
                 break;
-        }
-        if(this.popup != null){
-            this.popup.depth = 3;
-            this.time.delayedCall(5000, () => {
-                this.popup.destroy();
-            }, this);
         }
     }
 }
 
+//code for Queue provided from online
+// https://code.iamkate.com/javascript/queues/
+function Queue(){
+    var a=[], b=0;
+    this.getLength=function()
+    {
+        return a.length-b
+    };
+    this.isEmpty=function(){
+        return 0==a.length
+    };
+    this.enqueue=function(b){
+        a.push(b)
+    };
+    this.dequeue=function(){
+        if(0!=a.length){
+            var c=a[b];2*++b>=a.length&&(a=a.slice(b),b=0);
+            return c
+        }
+    };
+    this.peek=function(){
+        return 0<a.length?a[b]:void 0
+    }
+};
+//----------END BARROWED CODE-------------
 class spawnPositions{
     constructor(flag, x, y){
         this.flag = flag;
