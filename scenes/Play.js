@@ -38,6 +38,7 @@ class Play extends Phaser.Scene {
         this.load.image('electro', './assets/basic_creatures/electro.png');
         this.load.image('Truffle', './assets/rare_creatures/Truffle.png');
         this.load.image('Cotton_Candy', './assets/rare_creatures/Cotton_Candy.png');
+        this.load.image('uistrawberry', './assets/rare_creatures/StrawberryPopup.png')
     }
 
     create() {
@@ -540,9 +541,14 @@ class Play extends Phaser.Scene {
     }
 
     displayCreature(name){
+        this.popup;
+        if(this.popup != null){
+            this.popup.destroy();
+        }
         switch(name){
             case('strawberry'):
                 this.strawberry.alpha = 1;
+                this.popup = this.add.image(game.config.width/2, game.config.height/2, 'uistrawberry');
                 break;
             case('narwhal'):
                 this.narwhal.alpha = 1;
@@ -565,6 +571,12 @@ class Play extends Phaser.Scene {
             case('Cotton_Candy'):
                 this.Cotton_Candy.alpha = 1;
                 break;
+        }
+        if(this.popup != null){
+            this.popup.depth = 3;
+            this.time.delayedCall(5000, () => {
+                this.popup.destroy();
+            }, this);
         }
     }
 }
