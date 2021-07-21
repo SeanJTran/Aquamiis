@@ -21,6 +21,8 @@ class Play extends Phaser.Scene {
         this.load.image('ccc', './assets/uiassets/basicPod.png');
         this.load.image('rcc', './assets/uiassets/rarePod.png');
         this.load.image('lcc', './assets/uiassets/legendaryPod.png');
+        this.load.image('restart', './assets/replay.png');
+        this.load.image('mainMenu', './assets/mainMenu.png');
 
         this.load.spritesheet('commonEgg', './assets/basicEggAtlas.png', {frameWidth: 75, frameHeight: 63});
         this.load.spritesheet('rareEgg', './assets/rareEggAtlas.png', {frameWidth: 75, frameHeight: 63});
@@ -38,6 +40,7 @@ class Play extends Phaser.Scene {
         this.load.image('electro', './assets/rare_creatures/electro.png');
         this.load.image('Truffle', './assets/rare_creatures/Truffle.png');
         this.load.image('Cotton_Candy', './assets/rare_creatures/Cotton_Candy.png');
+        this.load.image('leonis', './assets/legendary_creatures/leonis.png');
 
         this.load.image('uistrawberry', './assets/legendary_creatures/StrawberryPopup.png');
         this.load.image('uinarwhal', './assets/basic_creatures/narwhalPopup.png');
@@ -47,9 +50,14 @@ class Play extends Phaser.Scene {
         this.load.image('uielectro', './assets/rare_creatures/electroPopup.png');
         this.load.image('uiTruffle', './assets/rare_creatures/TrufflePopup.png');
         this.load.image('uiCotton_Candy', './assets/rare_creatures/Cotton_CandyPopup.png');
+        this.load.image('uileonis', './assets/legendary_creatures/leonisPopup.png');
     }
 
     create() {
+        commonsPulled = 0;
+        raresPulled = 0;
+        legendariesPulled = 0;
+        collectedCreatures = [];
         this.sound.play('menuMusic', {loop: true, volume: 0.2});
         let playTextConfig = {
             fontSize: '28px',
@@ -74,7 +82,7 @@ class Play extends Phaser.Scene {
             frameRate: 4
         })
         
-        //initiallization section
+        //variable initiallization section
         const TOP = 3;
         const MIDDLE = 2;
         const BOTTOM = 1;
@@ -91,6 +99,13 @@ class Play extends Phaser.Scene {
         this.eggs = [new spawnPositions(false, 250, 400), new spawnPositions(false, 400, 450), new spawnPositions(false, 650, 425)];
         this.uiPopUps = new Queue();
         this.popupDisplayed = false;
+        this.restart = this.add.image(game.config.width/2 - 100, game.config.height/2 + 100, 'restart');
+        this.mainMenu = this.add.image(game.config.width/2 + 100, game.config.height/2 + 100, 'mainMenu');
+        this.restart.alpha = 0;
+        this.mainMenu.alpha = 0;
+        this.restart.depth = TOP;
+        this.mainMenu.depth = TOP;
+
 
         //static menu setup
         this.uibar = this.add.image(0, game.config.height - 50, 'uibar').setOrigin(0,0);
@@ -126,7 +141,17 @@ class Play extends Phaser.Scene {
         this.buy3.depth = MIDDLE;
 
 
-
+        //restart and menu buttons
+        this.restart.on('pointerdown', function(){
+            this.sound.stopAll();
+            this.scene.restart();
+        }, this);
+        this.mainMenu.on('pointerdown', function(){
+            this.sound.stopAll();
+            this.scene.start("menuScene");
+        }, this);
+        
+        //buy button event listeners
         this.buy1.on('pointerdown', function(){
             this.score--;
             if(commonsPulled >= MAX_COM-1){
@@ -135,7 +160,7 @@ class Play extends Phaser.Scene {
             if(this.score >= 10 && commonsPulled<MAX_COM){
                 this.pullCreature('C');
             }
-        }, this);
+        }, this)
 
         this.buy2.on('pointerdown', function(){
             this.score--;
@@ -146,6 +171,7 @@ class Play extends Phaser.Scene {
                 this.pullCreature('R');
             }
         }, this);
+
         this.buy3.on('pointerdown', function(){
             this.score--;
             if(legendariesPulled >= MAX_LEG-1){
@@ -344,7 +370,7 @@ class Play extends Phaser.Scene {
             frameRate: 2
         });
 
-        //creature sprite scene initialization
+        //creature sprite initialization
         this.strawberry = this.add.sprite(600, 200, 'holder').play('strawberryAnim');
         this.strawberry.alpha = 0;
         this.narwhal = this.add.sprite(400, 350, 'holder').play('narwhalAnim');
@@ -361,6 +387,8 @@ class Play extends Phaser.Scene {
         this.Truffle.alpha = 0;
         this.Cotton_Candy = this.add.sprite(450, 240, 'Cotton_Candy');
         this.Cotton_Candy.alpha = 0;
+        this.leonis = this.add.sprite(100, 150, 'leonis');
+        this.leonis.alpha = 0;
 
     }
     update(){
@@ -380,6 +408,7 @@ class Play extends Phaser.Scene {
         }
         if(!this.uiPopUps.isEmpty() && !this.popupDisplayed){
             this.popup = this.add.image(game.config.width/2, game.config.height/2, this.uiPopUps.dequeue());
+            this.popup.depth = 2;
             this.popupDisplayed = true;
         }
         if(this.pointer.leftButtonReleased() &&  !this.canPress){
@@ -397,6 +426,15 @@ class Play extends Phaser.Scene {
             this.time.delayedCall(1000, () => {
                 this.timeStep = false;
             }, this);
+        }
+        //check if  game is over
+        if(commonsPulled == MAX_COM && raresPulled == MAX_RARE && legendariesPulled == MAX_LEG){
+            if(!this.eggs[0].flag && !this.eggs[1].flag && !this.eggs[2].flag && !this.popup.active){
+                this.restart.alpha = 0.8;
+                this.mainMenu.alpha = 0.8;
+                this.restart.setInteractive();
+                this.mainMenu.setInteractive();
+            }
         }
 
         //add score passivly every 10 seconds
@@ -595,6 +633,9 @@ class Play extends Phaser.Scene {
                 this.Cotton_Candy.alpha = 1;
                 this.uiPopUps.enqueue('uiCotton_Candy');
                 break;
+            case('leonis'):
+                this.leonis.alpha = 1;
+                this.uiPopUps.enqueue('uileonis');
         }
     }
 }

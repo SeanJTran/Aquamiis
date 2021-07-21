@@ -24,7 +24,6 @@ class Intro extends Phaser.Scene {
         this.justClicked = true;
         this.slideIndex = 0;
         this.bg = this.add.image(0, 0, 'lore1').setOrigin(0,0);  
-        //this.add.rectangle(100,200, 200, 400, 0xfff)
         this.pointer = game.input.activePointer;
     }
 
@@ -36,7 +35,6 @@ class Intro extends Phaser.Scene {
         }
         if(leftDown && !this.justClicked){
             if(this.bg.texture.key == 'tutorial7'){
-                //console.log("swap");
                 this.sound.stopAll();
                 this.scene.start("playScene");
             }

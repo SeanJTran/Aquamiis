@@ -30,13 +30,13 @@ let borderPadding = borderUISize / 3;
 var collectedCreatures = [];
 var commonCreatures = ['narwhal', 'blossom', 'onion-chan'];
 var rareCreatures = ['electro', 'Cotton_Candy', 'Truffle'];
-var legendaryCreatures = ['prince', 'strawberry'];
+var legendaryCreatures = ['prince', 'strawberry', 'leonis'];
 var commonsPulled = 0;
 var raresPulled = 0;
 var legendariesPulled = 0;
 const MAX_COM = 3; // change these as creatures get added to the arrays above
 const MAX_RARE = 3;
-const MAX_LEG = 2;
+const MAX_LEG = 3;
 let keySpace;
 let keyM;
 let keyC;

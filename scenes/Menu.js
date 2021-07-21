@@ -16,7 +16,10 @@ class Menu extends Phaser.Scene{
       // initialize
       this.pointer = game.input.activePointer;
       this.menuStart = true;
-      this.justClicked = false;
+      this.justClicked = true;
+      this.time.delayedCall(1000, () => {
+        this.justClicked = false;
+    }, this);
     }
 
     update(){
