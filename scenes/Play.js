@@ -23,6 +23,7 @@ class Play extends Phaser.Scene {
         this.load.image('lcc', './assets/uiassets/legendaryPod.png');
         this.load.image('restart', './assets/replay.png');
         this.load.image('mainMenu', './assets/mainMenu.png');
+        this.load.image('congrats', './assets/endGame.png');
 
         this.load.spritesheet('commonEgg', './assets/basicEggAtlas.png', {frameWidth: 75, frameHeight: 63});
         this.load.spritesheet('rareEgg', './assets/rareEggAtlas.png', {frameWidth: 75, frameHeight: 63});
@@ -99,12 +100,15 @@ class Play extends Phaser.Scene {
         this.eggs = [new spawnPositions(false, 250, 400), new spawnPositions(false, 400, 450), new spawnPositions(false, 650, 425)];
         this.uiPopUps = new Queue();
         this.popupDisplayed = false;
-        this.restart = this.add.image(game.config.width/2 - 100, game.config.height/2 + 100, 'restart');
-        this.mainMenu = this.add.image(game.config.width/2 + 100, game.config.height/2 + 100, 'mainMenu');
+        this.restart = this.add.image(game.config.width/2 - 100, game.config.height/2 + 150, 'restart');
+        this.mainMenu = this.add.image(game.config.width/2 + 100, game.config.height/2 + 150, 'mainMenu');
+        this.congrats = this.add.image(game.config.width/2, game.config.height/2, 'congrats');
         this.restart.alpha = 0;
         this.mainMenu.alpha = 0;
+        this.congrats.alpha = 0;
         this.restart.depth = TOP;
         this.mainMenu.depth = TOP;
+        this.congrats.depth = MIDDLE;
 
 
         //static menu setup
@@ -430,10 +434,13 @@ class Play extends Phaser.Scene {
         //check if  game is over
         if(commonsPulled == MAX_COM && raresPulled == MAX_RARE && legendariesPulled == MAX_LEG){
             if(!this.eggs[0].flag && !this.eggs[1].flag && !this.eggs[2].flag && !this.popup.active){
-                this.restart.alpha = 0.8;
-                this.mainMenu.alpha = 0.8;
-                this.restart.setInteractive();
-                this.mainMenu.setInteractive();
+                this.time.delayedCall(2000, () => {
+                    this.restart.alpha = 0.8;
+                    this.mainMenu.alpha = 0.8;
+                    this.congrats.alpha = 1;
+                    this.restart.setInteractive();
+                    this.mainMenu.setInteractive();
+                }, this);
             }
         }
 

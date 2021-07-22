@@ -19,8 +19,7 @@ class Intro extends Phaser.Scene {
     }
 
     create(){
-        this.slides = ['lore1', 'lore2', 'lore3', 'lore4', 'tutorial', 'tutorial2', 'tutorial3', 'tutorial4', 'tutorial5', 
-        'tutorial6', 'tutorial7'];
+        this.slides = ['lore1', 'lore2', 'lore3', 'lore4', 'tutorial', 'tutorial2', 'tutorial3', 'tutorial5', 'tutorial7'];
         this.justClicked = true;
         this.slideIndex = 0;
         this.bg = this.add.image(0, 0, 'lore1').setOrigin(0,0);  
