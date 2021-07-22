@@ -448,7 +448,7 @@ class Play extends Phaser.Scene {
         if(!this.addEssence){
             this.addEssence = true;
             this.time.delayedCall(10000, () => {
-                this.score += (commonsPulled + (4 * raresPulled) + (10 * legendariesPulled));
+                this.score += (commonsPulled + (10 * raresPulled) + (100 * legendariesPulled));
                 this.addEssence = false;
             }, this);
         }
