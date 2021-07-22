@@ -434,7 +434,7 @@ class Play extends Phaser.Scene {
         //check if  game is over
         if(commonsPulled == MAX_COM && raresPulled == MAX_RARE && legendariesPulled == MAX_LEG){
             if(!this.eggs[0].flag && !this.eggs[1].flag && !this.eggs[2].flag && !this.popup.active){
-                this.time.delayedCall(2000, () => {
+                this.time.delayedCall(10000, () => {
                     this.restart.alpha = 0.8;
                     this.mainMenu.alpha = 0.8;
                     this.congrats.alpha = 1;
