@@ -206,6 +206,35 @@ class Play extends Phaser.Scene {
             this.pods.y = game.config.height - 150;
             //this.creatures.x = 112*2;
             //this.creatures.y = game.config.height - 150;
+            console.log("pods clicked");
+
+            //disable creatures tab display
+            this.creaturesTabDisable();
+
+            //disable pond display
+            this.pondTabDisable();
+
+            //display purchasable containers for creatures
+            this.pods.setTexture('wpodsTab');
+            rect.fillColor = 0xFFFFFF;
+            if(commonsPulled == MAX_COM){
+                this.buy1.alpha = 0.5;
+            }else{
+                this.buy1.alpha = 1;
+            }
+            this.buy1.setInteractive();
+            if(raresPulled == MAX_RARE){
+                this.buy2.alpha = 0.5;
+            }else{
+                this.buy2.alpha = 1;
+            }
+            this.buy2.setInteractive();
+            if(legendariesPulled == MAX_LEG){
+                this.buy3.alpha = 0.5;
+            }else{
+                this.buy3.alpha = 1;
+            }
+            this.buy3.setInteractive();
         }, this);
 
 
